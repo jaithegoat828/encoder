@@ -4,21 +4,21 @@
     <meta charset="utf-8" />
     <title>Secret Language Encoder</title>
     <style>
-      body { 
-        font-family: sans-serif; 
-        max-width: 600px; 
-        margin: 20px auto; 
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
         padding: 10px;
       }
-      textarea { 
-        width: 100%; 
-        height: 120px; 
-        margin-bottom: 10px; 
+      textarea {
+        width: 100%;
+        height: 120px;
+        margin-bottom: 10px;
         font-size: 1rem;
       }
-      button { 
-        margin-right: 8px; 
-        padding: 8px 14px; 
+      button {
+        margin-right: 8px;
+        padding: 8px 14px;
         font-size: 1rem;
       }
       h1 { text-align: center; }
@@ -39,6 +39,9 @@
     <textarea id="output" readonly></textarea>
 
     <script>
+      // -------------------------------
+      // SECRET LANGUAGE MAP
+      // -------------------------------
       const SYLLABLES = {
         a: "ka", b: "mi", c: "lo", d: "ra", e: "si",
         f: "tu", g: "ve", h: "na", i: "ri", j: "zo",
@@ -52,6 +55,9 @@
         Object.entries(SYLLABLES).map(([k, v]) => [v, k])
       );
 
+      // -------------------------------
+      // ENCODE
+      // -------------------------------
       function encode(text) {
         return text
           .toLowerCase()
@@ -60,6 +66,9 @@
           .join("");
       }
 
+      // -------------------------------
+      // DECODE
+      // -------------------------------
       function decode(text) {
         const parts = text.match(/(..)|\s/g) || [];
         return parts
@@ -67,6 +76,9 @@
           .join("");
       }
 
+      // -------------------------------
+      // UI HOOKS
+      // -------------------------------
       const input = document.getElementById("input");
       const output = document.getElementById("output");
 
@@ -75,4 +87,8 @@
       };
 
       document.getElementById("decodeBtn").onclick = () => {
-        output.value
+        output.value = decode(input.value);
+      };
+    </script>
+  </body>
+</html>
