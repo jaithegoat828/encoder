@@ -40,19 +40,20 @@
 
     <script>
       // -------------------------------
-      // SECRET LANGUAGE MAP
+      // FIXED SECRET LANGUAGE (reversible)
+      // Every letter becomes a syllable ending with "-"
       // -------------------------------
-      const SYLLABLES = {
-        a: "ka", b: "mi", c: "lo", d: "ra", e: "si",
-        f: "tu", g: "ve", h: "na", i: "ri", j: "zo",
-        k: "lu", l: "ma", m: "ni", n: "ko", o: "ta",
-        p: "su", q: "qe", r: "da", s: "fi", t: "ga",
-        u: "no", v: "pe", w: "wa", x: "xi", y: "yo",
-        z: "zu", " ": " "
+      const SYL = {
+        a: "ka-", b: "mi-", c: "lo-", d: "ra-", e: "si-",
+        f: "tu-", g: "ve-", h: "na-", i: "ri-", j: "zo-",
+        k: "lu-", l: "ma-", m: "ni-", n: "ko-", o: "ta-",
+        p: "su-", q: "qe-", r: "da-", s: "fi-", t: "ga-",
+        u: "no-", v: "pe-", w: "wa-", x: "xi-", y: "yo-",
+        z: "zu-", " ": "sp-"   // space becomes "sp-"
       };
 
-      const REVERSE_SYLLABLES = Object.fromEntries(
-        Object.entries(SYLLABLES).map(([k, v]) => [v, k])
+      const REV = Object.fromEntries(
+        Object.entries(SYL).map(([k, v]) => [v, k])
       );
 
       // -------------------------------
@@ -62,7 +63,7 @@
         return text
           .toLowerCase()
           .split("")
-          .map(ch => SYLLABLES[ch] ?? ch)
+          .map(ch => SYL[ch] ?? ch)
           .join("");
       }
 
@@ -70,9 +71,10 @@
       // DECODE
       // -------------------------------
       function decode(text) {
-        const parts = text.match(/(..)|\s/g) || [];
-        return parts
-          .map(p => REVERSE_SYLLABLES[p] ?? p)
+        return text
+          .split("-")        // split syllables
+          .filter(s => s)    // remove empty
+          .map(s => REV[s + "-"] ?? s)
           .join("");
       }
 
