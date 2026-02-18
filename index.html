@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Secret Language Encoder</title>
+    <title>Custom Encoder</title>
     <style>
       body {
         font-family: sans-serif;
@@ -25,7 +25,7 @@
     </style>
   </head>
   <body>
-    <h1>Secret Language Encoder</h1>
+    <h1>Custom Encoder</h1>
 
     <h3>Input</h3>
     <textarea id="input"></textarea>
@@ -40,20 +40,41 @@
 
     <script>
       // -------------------------------
-      // FIXED SECRET LANGUAGE (reversible)
-      // Every letter becomes a syllable ending with "-"
+      // FULL CUSTOM LANGUAGE MAP
       // -------------------------------
-      const SYL = {
-        a: "ka-", b: "mi-", c: "lo-", d: "ra-", e: "si-",
-        f: "tu-", g: "ve-", h: "na-", i: "ri-", j: "zo-",
-        k: "lu-", l: "ma-", m: "ni-", n: "ko-", o: "ta-",
-        p: "su-", q: "qe-", r: "da-", s: "fi-", t: "ga-",
-        u: "no-", v: "pe-", w: "wa-", x: "xi-", y: "yo-",
-        z: "zu-", " ": "sp-"   // space becomes "sp-"
+      const MAP = {
+        a: "102hij",
+        b: "203klo",
+        c: "304vex",
+        d: "405mir",
+        e: "506tal",
+        f: "607piv",
+        g: "708lur",
+        h: "809sef",
+        i: "910wok",
+        j: "111qaz",
+        k: "212xed",
+        l: "313cuv",
+        m: "414bim",
+        n: "515nop",
+        o: "616rav",
+        p: "717sol",
+        q: "818zun",
+        r: "919kel",
+        s: "121lop",
+        t: "222miv",
+        u: "323wex",
+        v: "424yil",
+        w: "525jur",
+        x: "626qer",
+        y: "727fim",
+        z: "828voz",
+        " ": "___"
       };
 
-      const REV = Object.fromEntries(
-        Object.entries(SYL).map(([k, v]) => [v, k])
+      // Reverse map for decoding
+      const REVERSE = Object.fromEntries(
+        Object.entries(MAP).map(([k, v]) => [v, k])
       );
 
       // -------------------------------
@@ -63,8 +84,8 @@
         return text
           .toLowerCase()
           .split("")
-          .map(ch => SYL[ch] ?? ch)
-          .join("");
+          .map(ch => MAP[ch] ?? ch)
+          .join(" ");
       }
 
       // -------------------------------
@@ -72,9 +93,8 @@
       // -------------------------------
       function decode(text) {
         return text
-          .split("-")        // split syllables
-          .filter(s => s)    // remove empty
-          .map(s => REV[s + "-"] ?? s)
+          .split(" ")
+          .map(token => REVERSE[token] ?? token)
           .join("");
       }
 
