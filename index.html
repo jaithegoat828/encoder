@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Custom Encoder</title>
+    <title>Secret Encoder (Password Locked)</title>
     <style>
       body {
         font-family: sans-serif;
-        max-width: 600px;
+        max-width: 700px;
         margin: 20px auto;
         padding: 10px;
       }
       textarea {
         width: 100%;
-        height: 120px;
+        height: 140px;
         margin-bottom: 10px;
         font-size: 1rem;
       }
@@ -22,57 +22,82 @@
         font-size: 1rem;
       }
       h1 { text-align: center; }
+      #lock {
+        background: #eee;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
     </style>
   </head>
+
   <body>
-    <h1>Custom Encoder</h1>
+    <h1>Secret Encoder (Locked)</h1>
 
-    <h3>Input</h3>
-    <textarea id="input"></textarea>
-
-    <div>
-      <button id="encodeBtn">Encode</button>
-      <button id="decodeBtn">Decode</button>
+    <!-- PASSWORD BOX -->
+    <div id="lock">
+      <p>Enter password to unlock:</p>
+      <input id="pw" type="password" style="width:100%;padding:8px;font-size:1rem;">
+      <button id="unlockBtn">Unlock</button>
+      <p id="msg" style="color:red;"></p>
     </div>
 
-    <h3>Output</h3>
-    <textarea id="output" readonly></textarea>
+    <!-- MAIN APP -->
+    <div id="app" style="display:none;">
+      <h3>Input</h3>
+      <textarea id="input"></textarea>
+
+      <div>
+        <button id="encodeBtn">Encode</button>
+        <button id="decodeBtn">Decode</button>
+      </div>
+
+      <h3>Output</h3>
+      <textarea id="output" readonly></textarea>
+    </div>
 
     <script>
       // -------------------------------
-      // FULL CUSTOM LANGUAGE MAP
+      // PASSWORD
       // -------------------------------
-      const MAP = {
-        a: "102hij",
-        b: "203klo",
-        c: "304vex",
-        d: "405mir",
-        e: "506tal",
-        f: "607piv",
-        g: "708lur",
-        h: "809sef",
-        i: "910wok",
-        j: "111qaz",
-        k: "212xed",
-        l: "313cuv",
-        m: "414bim",
-        n: "515nop",
-        o: "616rav",
-        p: "717sol",
-        q: "818zun",
-        r: "919kel",
-        s: "121lop",
-        t: "222miv",
-        u: "323wex",
-        v: "424yil",
-        w: "525jur",
-        x: "626qer",
-        y: "727fim",
-        z: "828voz",
-        " ": "___"
+      const PASSWORD = "2134";
+
+      document.getElementById("unlockBtn").onclick = () => {
+        const pw = document.getElementById("pw").value;
+        if (pw === PASSWORD) {
+          document.getElementById("lock").style.display = "none";
+          document.getElementById("app").style.display = "block";
+        } else {
+          document.getElementById("msg").textContent = "Wrong password.";
+        }
       };
 
-      // Reverse map for decoding
+      // -------------------------------
+      // FULL STYLE-D5 RANDOM CHAOS LANGUAGE
+      // -------------------------------
+      const MAP = {
+        a:"x9@p!", b:"k1#z%", c:"q8$r&", d:"m4!t@", e:"v7^b*",
+        f:"p2&c$", g:"s5!n#", h:"r3@l%", i:"w6#h&", j:"z1!q*",
+        k:"u8@d$", l:"y4#f%", m:"t9!g&", n:"o2@k*", o:"i7#j$",
+        p:"e5!m%", q:"c3@v&", r:"b6#x$", s:"n1!s@", t:"h8#p%",
+        u:"g4!r&", v:"f7@t$", w:"d9#u%", x:"a2!w&", y:"j5@y$",
+        z:"l3#o%", " ":"___",
+
+        "0":"@1x!9", "1":"#4p$2", "2":"%7q&5", "3":"!8r@3",
+        "4":"$6s#1", "5":"&9t%4", "6":"*2u!7", "7":"^5v&8",
+        "8":"~3w#6", "9":"?1z$0",
+
+        ".":"p@!3#", ",":"v#2$!", "!":"m%4@&", "?":"s*7#^",
+        "-":"q!8$@", "_":"z#1&*", "=":"x%5!^", "+":"k&9@#",
+        "/":"h*3$!", "\\":"o^7!%", "'":"t$2#&", "\"":"g!6@*",
+        ":":"b#9$!", ";":"n%4@^", "[":"e&1!#", "]":"r*8$%",
+        "{":"c^5@!", "}":"y$3#&", "(":"u!7@%", ")":"i#2$*",
+        "<":"j&6!^", ">":"l*9@#", "@":"a^4$!", "#":"d!1&*",
+        "$":"f#8@%", "%":"h%3$!", "^":"w&7!#", "&":"p*2@^",
+        "*":"q^6$!", "~":"s!9&*", "`":"t#5@%", "|":"k$1!&"
+      };
+
+      // Reverse map
       const REVERSE = Object.fromEntries(
         Object.entries(MAP).map(([k, v]) => [v, k])
       );
@@ -82,7 +107,6 @@
       // -------------------------------
       function encode(text) {
         return text
-          .toLowerCase()
           .split("")
           .map(ch => MAP[ch] ?? ch)
           .join(" ");
@@ -99,7 +123,7 @@
       }
 
       // -------------------------------
-      // UI HOOKS
+      // UI
       // -------------------------------
       const input = document.getElementById("input");
       const output = document.getElementById("output");
