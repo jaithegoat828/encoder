@@ -1,140 +1,223 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Secret Encoder (Password Locked)</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        max-width: 700px;
-        margin: 20px auto;
-        padding: 10px;
-      }
-      textarea {
-        width: 100%;
-        height: 140px;
-        margin-bottom: 10px;
-        font-size: 1rem;
-      }
-      button {
-        margin-right: 8px;
-        padding: 8px 14px;
-        font-size: 1rem;
-      }
-      h1 { text-align: center; }
-      #lock {
-        background: #eee;
-        padding: 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-      }
-    </style>
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <title>Secret Encoder</title>
 
-  <body>
-    <h1>Secret Encoder (Locked)</h1>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d0d0d;
+      color: #e6e6e6;
+      max-width: 750px;
+      margin: 40px auto;
+      padding: 20px;
+      transition: background 0.4s, color 0.4s;
+    }
 
-    <!-- PASSWORD BOX -->
-    <div id="lock">
-      <p>Enter password to unlock:</p>
-      <input id="pw" type="password" style="width:100%;padding:8px;font-size:1rem;">
-      <button id="unlockBtn">Unlock</button>
-      <p id="msg" style="color:red;"></p>
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #00e0ff;
+      text-shadow: 0 0 10px #00e0ff;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #00e0ff;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      resize: none;
+    }
+
+    button {
+      padding: 10px 18px;
+      margin-right: 10px;
+      background: #00e0ff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: black;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #00bcd4;
+      transform: scale(1.05);
+    }
+
+    #lock {
+      background: #111;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #222;
+      box-shadow: 0 0 15px #00e0ff55;
+    }
+
+    #coolFeature {
+      margin-top: 20px;
+      padding: 15px;
+      background: #111;
+      border-radius: 10px;
+      border: 1px solid #222;
+      text-align: center;
+      color: #00e0ff;
+      font-size: 1.1rem;
+      display: none;
+    }
+
+    /* Stealth mode */
+    .stealth {
+      background: black !important;
+      color: black !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Secret Encoder</h1>
+
+  <!-- PASSWORD LOCK -->
+  <div id="lock">
+    <p>Enter password to unlock:</p>
+    <input id="pw" type="password" style="width:100%;padding:10px;font-size:1rem;border-radius:6px;">
+    <button id="unlockBtn">Unlock</button>
+    <p id="msg" style="color:#ff4444;"></p>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app" style="display:none;">
+    <h3>Input</h3>
+    <textarea id="input"></textarea>
+    <p id="count" style="color:#00e0ff;">0 characters</p>
+
+    <div style="margin-top:10px;">
+      <button id="encodeBtn">Encode</button>
+      <button id="decodeBtn">Decode</button>
+      <button id="copyBtn">Copy Output</button>
     </div>
 
-    <!-- MAIN APP -->
-    <div id="app" style="display:none;">
-      <h3>Input</h3>
-      <textarea id="input"></textarea>
+    <h3 style="margin-top:20px;">Output</h3>
+    <textarea id="output" readonly></textarea>
 
-      <div>
-        <button id="encodeBtn">Encode</button>
-        <button id="decodeBtn">Decode</button>
-      </div>
+    <!-- COOL FEATURE -->
+    <div id="coolFeature">✨ Encryption Mode Activated ✨</div>
+  </div>
 
-      <h3>Output</h3>
-      <textarea id="output" readonly></textarea>
-    </div>
+  <script>
+    // -------------------------------
+    // PASSWORD SYSTEM
+    // -------------------------------
+    const PASSWORD = "yrps2026";
 
-    <script>
-      // -------------------------------
-      // PASSWORD
-      // -------------------------------
-      const PASSWORD = "2134";
+    document.getElementById("unlockBtn").onclick = () => {
+      const pw = document.getElementById("pw").value;
 
-      document.getElementById("unlockBtn").onclick = () => {
-        const pw = document.getElementById("pw").value;
-        if (pw === PASSWORD) {
-          document.getElementById("lock").style.display = "none";
-          document.getElementById("app").style.display = "block";
-        } else {
-          document.getElementById("msg").textContent = "Wrong password.";
-        }
-      };
+      if (pw === PASSWORD) {
+        document.getElementById("lock").style.display = "none";
+        document.getElementById("app").style.display = "block";
 
-      // -------------------------------
-      // FULL STYLE-D5 RANDOM CHAOS LANGUAGE
-      // -------------------------------
-      const MAP = {
-        a:"x9@p!", b:"k1#z%", c:"q8$r&", d:"m4!t@", e:"v7^b*",
-        f:"p2&c$", g:"s5!n#", h:"r3@l%", i:"w6#h&", j:"z1!q*",
-        k:"u8@d$", l:"y4#f%", m:"t9!g&", n:"o2@k*", o:"i7#j$",
-        p:"e5!m%", q:"c3@v&", r:"b6#x$", s:"n1!s@", t:"h8#p%",
-        u:"g4!r&", v:"f7@t$", w:"d9#u%", x:"a2!w&", y:"j5@y$",
-        z:"l3#o%", " ":"___",
+        // Cool feature: animated reveal
+        const cf = document.getElementById("coolFeature");
+        cf.style.display = "block";
+        cf.style.opacity = 0;
+        let o = 0;
+        const fade = setInterval(() => {
+          o += 0.05;
+          cf.style.opacity = o;
+          if (o >= 1) clearInterval(fade);
+        }, 40);
 
-        "0":"@1x!9", "1":"#4p$2", "2":"%7q&5", "3":"!8r@3",
-        "4":"$6s#1", "5":"&9t%4", "6":"*2u!7", "7":"^5v&8",
-        "8":"~3w#6", "9":"?1z$0",
-
-        ".":"p@!3#", ",":"v#2$!", "!":"m%4@&", "?":"s*7#^",
-        "-":"q!8$@", "_":"z#1&*", "=":"x%5!^", "+":"k&9@#",
-        "/":"h*3$!", "\\":"o^7!%", "'":"t$2#&", "\"":"g!6@*",
-        ":":"b#9$!", ";":"n%4@^", "[":"e&1!#", "]":"r*8$%",
-        "{":"c^5@!", "}":"y$3#&", "(":"u!7@%", ")":"i#2$*",
-        "<":"j&6!^", ">":"l*9@#", "@":"a^4$!", "#":"d!1&*",
-        "$":"f#8@%", "%":"h%3$!", "^":"w&7!#", "&":"p*2@^",
-        "*":"q^6$!", "~":"s!9&*", "`":"t#5@%", "|":"k$1!&"
-      };
-
-      // Reverse map
-      const REVERSE = Object.fromEntries(
-        Object.entries(MAP).map(([k, v]) => [v, k])
-      );
-
-      // -------------------------------
-      // ENCODE
-      // -------------------------------
-      function encode(text) {
-        return text
-          .split("")
-          .map(ch => MAP[ch] ?? ch)
-          .join(" ");
+      } else {
+        document.getElementById("msg").textContent = "Incorrect password.";
       }
+    };
 
-      // -------------------------------
-      // DECODE
-      // -------------------------------
-      function decode(text) {
-        return text
-          .split(" ")
-          .map(token => REVERSE[token] ?? token)
-          .join("");
+    // -------------------------------
+    // CHAOS MAP
+    // -------------------------------
+    const MAP = {
+      a:"x9@p!", b:"k1#z%", c:"q8$r&", d:"m4!t@", e:"v7^b*",
+      f:"p2&c$", g:"s5!n#", h:"r3@l%", i:"w6#h&", j:"z1!q*",
+      k:"u8@d$", l:"y4#f%", m:"t9!g&", n:"o2@k*", o:"i7#j$",
+      p:"e5!m%", q:"c3@v&", r:"b6#x$", s:"n1!s@", t:"h8#p%",
+      u:"g4!r&", v:"f7@t$", w:"d9#u%", x:"a2!w&", y:"j5@y$",
+      z:"l3#o%", " ":"___",
+
+      "0":"@1x!9", "1":"#4p$2", "2":"%7q&5", "3":"!8r@3",
+      "4":"$6s#1", "5":"&9t%4", "6":"*2u!7", "7":"^5v&8",
+      "8":"~3w#6", "9":"?1z$0",
+
+      ".":"p@!3#", ",":"v#2$!", "!":"m%4@&", "?":"s*7#^",
+      "-":"q!8$@", "_":"z#1&*", "=":"x%5!^", "+":"k&9@#",
+      "/":"h*3$!", "\\":"o^7!%", "'":"t$2#&", "\"":"g!6@*",
+      ":":"b#9$!", ";":"n%4@^", "[":"e&1!#", "]":"r*8$%",
+      "{":"c^5@!", "}":"y$3#&", "(":"u!7@%", ")":"i#2$*",
+      "<":"j&6!^", ">":"l*9@#", "@":"a^4$!", "#":"d!1&*",
+      "$":"f#8@%", "%":"h%3$!", "^":"w&7!#", "&":"p*2@^",
+      "*":"q^6$!", "~":"s!9&*", "`":"t#5@%", "|":"k$1!&"
+    };
+
+    const REVERSE = Object.fromEntries(
+      Object.entries(MAP).map(([k, v]) => [v, k])
+    );
+
+    // -------------------------------
+    // ENCODE / DECODE
+    // -------------------------------
+    function encode(text) {
+      return text.split("").map(ch => MAP[ch] ?? ch).join(" ");
+    }
+
+    function decode(text) {
+      return text.split(" ").map(t => REVERSE[t] ?? t).join("");
+    }
+
+    document.getElementById("encodeBtn").onclick = () => {
+      output.value = encode(input.value);
+    };
+
+    document.getElementById("decodeBtn").onclick = () => {
+      output.value = decode(input.value);
+    };
+
+    // -------------------------------
+    // SURPRISE 1 — COPY BUTTON
+    // -------------------------------
+    document.getElementById("copyBtn").onclick = () => {
+      navigator.clipboard.writeText(output.value);
+      alert("Copied!");
+    };
+
+    // -------------------------------
+    // SURPRISE 2 — LIVE CHARACTER COUNTER
+    // -------------------------------
+    input.addEventListener("input", () => {
+      document.getElementById("count").textContent =
+        input.value.length + " characters";
+    });
+
+    // -------------------------------
+    // SURPRISE 3 — STEALTH MODE (press S)
+    // -------------------------------
+    let stealth = false;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "s") {
+        stealth = !stealth;
+        document.body.classList.toggle("stealth", stealth);
       }
+    });
+  </script>
 
-      // -------------------------------
-      // UI
-      // -------------------------------
-      const input = document.getElementById("input");
-      const output = document.getElementById("output");
-
-      document.getElementById("encodeBtn").onclick = () => {
-        output.value = encode(input.value);
-      };
-
-      document.getElementById("decodeBtn").onclick = () => {
-        output.value = decode(input.value);
-      };
-    </script>
-  </body>
+</body>
 </html>
