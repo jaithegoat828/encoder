@@ -106,26 +106,25 @@
       100% { transform: skew(0deg); opacity: 1; }
     }
 
+    /* Fake Google Classroom page */
+    #schoolPage {
+      display: none;
+      background: white;
+      color: black;
+      padding: 0;
+      border-radius: 8px;
+    }
+
     .stealth {
       background: black !important;
       color: black !important;
-    }
-
-    @media (max-width: 600px) {
-      button {
-        width: 100%;
-        margin: 8px 0;
-      }
-      textarea {
-        height: 120px;
-      }
     }
   </style>
 </head>
 
 <body>
 
-  <h1>Data Cipher Console</h1>
+  <h1 id="title">Data Cipher Console</h1>
 
   <!-- PASSWORD LOCK -->
   <div id="lock">
@@ -133,6 +132,29 @@
     <input id="pw" type="password" style="width:100%;padding:10px;font-size:1rem;border-radius:8px;">
     <button id="unlockBtn">Unlock</button>
     <p id="msg" style="color:#ff4444;"></p>
+  </div>
+
+  <!-- FAKE GOOGLE CLASSROOM PAGE -->
+  <div id="schoolPage">
+    <div style="background:#1a73e8;color:white;padding:16px;border-radius:8px;margin-bottom:20px;">
+      <h2 style="margin:0;font-size:22px;">Classwork</h2>
+      <p style="margin:4px 0 0 0;font-size:14px;">English – Year 8</p>
+    </div>
+
+    <div style="background:white;color:black;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
+      <h3 style="margin:0;font-size:18px;">Weekly Reading Task</h3>
+      <p style="margin:6px 0 0 0;font-size:14px;color:#555;">Posted by Ms. Carter • Due tomorrow</p>
+    </div>
+
+    <div style="background:white;color:black;padding:16px;border-radius:8px;border:1 solid #ddd;margin-bottom:15px;">
+      <h3 style="margin:0;font-size:18px;">Vocabulary Worksheet</h3>
+      <p style="margin:6px 0 0 0;font-size:14px;color:#555;">Posted by Ms. Carter • Due Friday</p>
+    </div>
+
+    <div style="background:white;color:black;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
+      <h3 style="margin:0;font-size:18px;">Classroom Announcements</h3>
+      <p style="margin:6px 0 0 0;font-size:14px;color:#555;">Updated today</p>
+    </div>
   </div>
 
   <!-- MAIN APP -->
@@ -152,7 +174,7 @@
   </div>
 
   <script>
-    const PASSWORD = "2134";
+    const PASSWORD = "yrps2026";
 
     document.getElementById("unlockBtn").onclick = () => {
       const pw = document.getElementById("pw").value;
@@ -167,6 +189,7 @@
       }
     };
 
+    /* CHAOS MAP */
     const MAP = {
       a:"x9@p!", b:"k1#z%", c:"q8$r&", d:"m4!t@", e:"v7^b*",
       f:"p2&c$", g:"s5!n#", h:"r3@l%", i:"w6#h&", j:"z1!q*",
@@ -226,12 +249,43 @@
         input.value.length + " characters";
     });
 
+    /* STEALTH MODE (S) */
     let stealth = false;
 
     document.addEventListener("keydown", (e) => {
       if (e.key.toLowerCase() === "s") {
         stealth = !stealth;
         document.body.classList.toggle("stealth", stealth);
+      }
+    });
+
+    /* PANIC KEY (ESC) */
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        input.value = "";
+        output.value = "";
+        document.getElementById("app").style.display = "none";
+        document.getElementById("schoolPage").style.display = "block";
+        document.getElementById("title").textContent = "Classwork";
+      }
+    });
+
+    /* FAKE GOOGLE CLASSROOM MODE (F) */
+    let fake = false;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "f") {
+        fake = !fake;
+
+        if (fake) {
+          document.getElementById("app").style.display = "none";
+          document.getElementById("schoolPage").style.display = "block";
+          document.getElementById("title").textContent = "Classwork";
+        } else {
+          document.getElementById("schoolPage").style.display = "none";
+          document.getElementById("app").style.display = "block";
+          document.getElementById("title").textContent = "Data Cipher Console";
+        }
       }
     });
   </script>
