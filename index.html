@@ -33,8 +33,10 @@
       font-size: 1rem;
       border-radius: 6px;
       resize: none;
+      transition: background 0.3s;
     }
 
+    /* BUTTONS */
     button {
       padding: 10px 18px;
       margin-right: 10px;
@@ -45,14 +47,32 @@
       cursor: pointer;
       color: black;
       font-weight: bold;
-      transition: 0.2s;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s;
     }
 
     button:hover {
-      background: #00bcd4;
       transform: scale(1.05);
     }
 
+    /* Neon sweep */
+    button::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 120%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, #00e0ff55, transparent);
+      transition: 0.4s;
+    }
+
+    button:hover::after {
+      left: 120%;
+    }
+
+    /* PASSWORD BOX */
     #lock {
       background: #111;
       padding: 25px;
@@ -62,16 +82,28 @@
       box-shadow: 0 0 15px #00e0ff55;
     }
 
-    #coolFeature {
-      margin-top: 20px;
-      padding: 15px;
-      background: #111;
-      border-radius: 10px;
-      border: 1px solid #222;
-      text-align: center;
-      color: #00e0ff;
-      font-size: 1.1rem;
-      display: none;
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Encryption flash */
+    .flash {
+      animation: flashAnim 0.25s ease;
+    }
+
+    @keyframes flashAnim {
+      0% { background:#00e0ff33; }
+      100% { background:#1a1a1a; }
     }
 
     /* Stealth mode */
@@ -108,42 +140,29 @@
 
     <h3 style="margin-top:20px;">Output</h3>
     <textarea id="output" readonly></textarea>
-
-    <!-- COOL FEATURE -->
-    <div id="coolFeature">✨ Encryption Mode Activated ✨</div>
   </div>
 
   <script>
     // -------------------------------
     // PASSWORD SYSTEM
     // -------------------------------
-    const PASSWORD = "yrps2026";
+    const PASSWORD = "2134";
 
     document.getElementById("unlockBtn").onclick = () => {
       const pw = document.getElementById("pw").value;
 
       if (pw === PASSWORD) {
         document.getElementById("lock").style.display = "none";
-        document.getElementById("app").style.display = "block";
-
-        // Cool feature: animated reveal
-        const cf = document.getElementById("coolFeature");
-        cf.style.display = "block";
-        cf.style.opacity = 0;
-        let o = 0;
-        const fade = setInterval(() => {
-          o += 0.05;
-          cf.style.opacity = o;
-          if (o >= 1) clearInterval(fade);
-        }, 40);
-
+        const app = document.getElementById("app");
+        app.style.display = "block";
+        app.classList.add("fade-in");
       } else {
         document.getElementById("msg").textContent = "Incorrect password.";
       }
     };
 
     // -------------------------------
-    // CHAOS MAP
+    // CHAOS MAP (Style D5)
     // -------------------------------
     const MAP = {
       a:"x9@p!", b:"k1#z%", c:"q8$r&", d:"m4!t@", e:"v7^b*",
@@ -184,14 +203,18 @@
 
     document.getElementById("encodeBtn").onclick = () => {
       output.value = encode(input.value);
+      output.classList.add("flash");
+      setTimeout(() => output.classList.remove("flash"), 250);
     };
 
     document.getElementById("decodeBtn").onclick = () => {
       output.value = decode(input.value);
+      output.classList.add("flash");
+      setTimeout(() => output.classList.remove("flash"), 250);
     };
 
     // -------------------------------
-    // SURPRISE 1 — COPY BUTTON
+    // COPY BUTTON
     // -------------------------------
     document.getElementById("copyBtn").onclick = () => {
       navigator.clipboard.writeText(output.value);
@@ -199,7 +222,7 @@
     };
 
     // -------------------------------
-    // SURPRISE 2 — LIVE CHARACTER COUNTER
+    // CHARACTER COUNTER
     // -------------------------------
     input.addEventListener("input", () => {
       document.getElementById("count").textContent =
@@ -207,7 +230,7 @@
     });
 
     // -------------------------------
-    // SURPRISE 3 — STEALTH MODE (press S)
+    // STEALTH MODE (press S)
     // -------------------------------
     let stealth = false;
 
