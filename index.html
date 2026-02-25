@@ -33,7 +33,6 @@
       font-size: 1rem;
       border-radius: 12px;
       resize: none;
-      transition: background 0.3s;
     }
 
     button {
@@ -46,29 +45,11 @@
       cursor: pointer;
       color: black;
       font-weight: bold;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.15s;
       width: 31%;
     }
 
     button:hover {
       transform: scale(1.05);
-    }
-
-    button::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -120%;
-      width: 120%;
-      height: 100%;
-      background: linear-gradient(120deg, transparent, #00e0ff55, transparent);
-      transition: 0.4s;
-    }
-
-    button:hover::after {
-      left: 120%;
     }
 
     #lock {
@@ -80,19 +61,7 @@
       box-shadow: 0 0 15px #00e0ff55;
     }
 
-    .fade-in {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeIn 0.5s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
+    /* Glitch ONLY for encode/decode */
     .glitch {
       animation: glitchAnim 0.35s steps(2, end);
     }
@@ -136,27 +105,25 @@
 
   <!-- FAKE GOOGLE CLASSROOM PAGE -->
   <div id="schoolPage">
-    <!-- Top bar -->
     <div style="background:#1a73e8;color:white;padding:16px 20px;border-radius:8px 8px 0 0;">
       <h2 style="margin:0;font-size:22px;">Classwork</h2>
       <p style="margin:4px 0 0 0;font-size:14px;">Year 5/6 • Room A</p>
     </div>
 
-    <!-- Content area -->
     <div style="padding:16px 20px;">
-      <div style="background:white;color:black;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
+      <div style="background:white;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
         <h3 style="margin:0;font-size:18px;">Literacy – Weekly Reading Task</h3>
-        <p style="margin:6px 0 0 0;font-size:14px;color:#555;">Posted by Ms. Carter • Due tomorrow</p>
+        <p style="margin:6px 0 0 0;color:#555;">Posted by Ms. Carter • Due tomorrow</p>
       </div>
 
-      <div style="background:white;color:black;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
+      <div style="background:white;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
         <h3 style="margin:0;font-size:18px;">Numeracy – Practice Questions</h3>
-        <p style="margin:6px 0 0 0;font-size:14px;color:#555;">Posted by Ms. Carter • Due Friday</p>
+        <p style="margin:6px 0 0 0;color:#555;">Posted by Ms. Carter • Due Friday</p>
       </div>
 
-      <div style="background:white;color:black;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
+      <div style="background:white;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
         <h3 style="margin:0;font-size:18px;">Inquiry – Project Check‑In</h3>
-        <p style="margin:6px 0 0 0;font-size:14px;color:#555;">Updated today</p>
+        <p style="margin:6px 0 0 0;color:#555;">Updated today</p>
       </div>
     </div>
   </div>
@@ -191,6 +158,7 @@
     let fake = false;
     let stealth = false;
 
+    /* FIXED LOGIN — NO GLITCH, NO DISAPPEAR */
     document.getElementById("unlockBtn").onclick = () => {
       const pw = pwInput.value.trim();
 
@@ -199,7 +167,6 @@
         lockDiv.style.display = "none";
         schoolPage.style.display = "none";
         appDiv.style.display = "block";
-        appDiv.classList.add("fade-in");
         titleEl.textContent = "Data Cipher Console";
       } else {
         msgEl.textContent = "Incorrect password.";
@@ -213,20 +180,7 @@
       k:"u8@d$", l:"y4#f%", m:"t9!g&", n:"o2@k*", o:"i7#j$",
       p:"e5!m%", q:"c3@v&", r:"b6#x$", s:"n1!s@", t:"h8#p%",
       u:"g4!r&", v:"f7@t$", w:"d9#u%", x:"a2!w&", y:"j5@y$",
-      z:"l3#o%", " ":"___",
-
-      "0":"@1x!9", "1":"#4p$2", "2":"%7q&5", "3":"!8r@3",
-      "4":"$6s#1", "5":"&9t%4", "6":"*2u!7", "7":"^5v&8",
-      "8":"~3w#6", "9":"?1z$0",
-
-      ".":"p@!3#", ",":"v#2$!", "!":"m%4@&", "?":"s*7#^",
-      "-":"q!8$@", "_":"z#1&*", "=":"x%5!^", "+":"k&9@#",
-      "/":"h*3$!", "\\":"o^7!%", "'":"t$2#&", "\"":"g!6@*",
-      ":":"b#9$!", ";":"n%4@^", "[":"e&1!#", "]":"r*8$%",
-      "{":"c^5@!", "}":"y$3#&", "(":"u!7@%", ")":"i#2$*",
-      "<":"j&6!^", ">":"l*9@#", "@":"a^4$!", "#":"d!1&*",
-      "$":"f#8@%", "%":"h%3$!", "^":"w&7!#", "&":"p*2@^",
-      "*":"q^6$!", "~":"s!9&*", "`":"t#5@%", "|":"k$1!&"
+      z:"l3#o%", " ":"___"
     };
 
     const REVERSE = Object.fromEntries(
@@ -266,16 +220,16 @@
         input.value.length + " characters";
     });
 
+    /* STEALTH MODE (S) */
     document.addEventListener("keydown", (e) => {
-      const key = e.key.toLowerCase();
-
-      // Stealth mode (S)
-      if (key === "s") {
+      if (e.key.toLowerCase() === "s") {
         stealth = !stealth;
         document.body.classList.toggle("stealth", stealth);
       }
+    });
 
-      // Panic key (ESC) – only if unlocked
+    /* PANIC KEY (ESC) */
+    document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && unlocked) {
         input.value = "";
         output.value = "";
@@ -284,9 +238,11 @@
         titleEl.textContent = "Classwork";
         fake = true;
       }
+    });
 
-      // Fake Classroom toggle (F) – only if unlocked
-      if (key === "f" && unlocked) {
+    /* FAKE CLASSROOM TOGGLE (F) — FIXED */
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "f" && unlocked) {
         fake = !fake;
 
         if (fake) {
