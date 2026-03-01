@@ -75,15 +75,6 @@
       100% { transform: skew(0deg); opacity: 1; }
     }
 
-    /* Fake Google Classroom page */
-    #schoolPage {
-      display: none;
-      background: #f5f5f5;
-      color: black;
-      padding: 0;
-      border-radius: 8px;
-    }
-
     .stealth {
       background: black !important;
       color: black !important;
@@ -101,31 +92,6 @@
     <input id="pw" type="password" style="width:100%;padding:10px;font-size:1rem;border-radius:8px;">
     <button id="unlockBtn">Unlock</button>
     <p id="msg" style="color:#ff4444;"></p>
-  </div>
-
-  <!-- FAKE GOOGLE CLASSROOM PAGE -->
-  <div id="schoolPage">
-    <div style="background:#1a73e8;color:white;padding:16px 20px;border-radius:8px 8px 0 0;">
-      <h2 style="margin:0;font-size:22px;">Classwork</h2>
-      <p style="margin:4px 0 0 0;font-size:14px;">Year 5/6 • Room A</p>
-    </div>
-
-    <div style="padding:16px 20px;">
-      <div style="background:white;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
-        <h3 style="margin:0;font-size:18px;">Literacy – Weekly Reading Task</h3>
-        <p style="margin:6px 0 0 0;color:#555;">Posted by Ms. Carter • Due tomorrow</p>
-      </div>
-
-      <div style="background:white;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
-        <h3 style="margin:0;font-size:18px;">Numeracy – Practice Questions</h3>
-        <p style="margin:6px 0 0 0;color:#555;">Posted by Ms. Carter • Due Friday</p>
-      </div>
-
-      <div style="background:white;padding:16px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;">
-        <h3 style="margin:0;font-size:18px;">Inquiry – Project Check‑In</h3>
-        <p style="margin:6px 0 0 0;color:#555;">Updated today</p>
-      </div>
-    </div>
   </div>
 
   <!-- MAIN APP -->
@@ -149,13 +115,11 @@
 
     const lockDiv = document.getElementById("lock");
     const appDiv = document.getElementById("app");
-    const schoolPage = document.getElementById("schoolPage");
     const titleEl = document.getElementById("title");
     const pwInput = document.getElementById("pw");
     const msgEl = document.getElementById("msg");
 
     let unlocked = false;
-    let fake = false;
     let stealth = false;
 
     /* FIXED LOGIN — NO GLITCH, NO DISAPPEAR */
@@ -165,7 +129,6 @@
       if (pw === PASSWORD) {
         unlocked = true;
         lockDiv.style.display = "none";
-        schoolPage.style.display = "none";
         appDiv.style.display = "block";
         titleEl.textContent = "Data Cipher Console";
       } else {
@@ -233,27 +196,6 @@
       if (e.key === "Escape" && unlocked) {
         input.value = "";
         output.value = "";
-        appDiv.style.display = "none";
-        schoolPage.style.display = "block";
-        titleEl.textContent = "Classwork";
-        fake = true;
-      }
-    });
-
-    /* FAKE CLASSROOM TOGGLE (F) — FIXED */
-    document.addEventListener("keydown", (e) => {
-      if (e.key.toLowerCase() === "f" && unlocked) {
-        fake = !fake;
-
-        if (fake) {
-          appDiv.style.display = "none";
-          schoolPage.style.display = "block";
-          titleEl.textContent = "Classwork";
-        } else {
-          schoolPage.style.display = "none";
-          appDiv.style.display = "block";
-          titleEl.textContent = "Data Cipher Console";
-        }
       }
     });
   </script>
